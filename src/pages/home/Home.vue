@@ -1,56 +1,18 @@
 <template>
-  <div class="header">
-      <!-- <div class="header-left"><solt name="left"></solt></div>
-      <div class="header-content"><solt name="content"></solt></div>
-      <div class="header-right"><solt name="right"></solt></div> -->
-
-      <div class="header-left">
-          <div class="iconfont">&#xe624;</div>
-      </div>
-      <div class="header-content">
-          <span class="iconfont">&#xe632;</span>
-          输入城市/景点/游玩主题
-          </div>
-      <div class="header-right">
-          城市
-          <span class="iconfont">&#xe6aa;</span>
-          </div>
-  </div>
+  <Header/>
 </template>
- 
+
 <script>
+import Header from './components/Header'
+
 export default {
-  name: 'Header'
+  name: 'Home',
+  components: {
+    Header
+  }
 }
 </script>
 
-<style lang="stylus" scoped>
-@import '~styles/varibles.styl'
+<style scoped>
 
-  .header
-    display flex
-    height .86rem
-    line-height .86rem
-    background-color $bgColor
-    color #fff
-    .header-left 
-      width .64rem
-      float left
-      text-align center
-    .header-content
-      flex 1
-      height .62rem
-      line-height .62rem
-      margin-top .12rem
-      margin-left .2rem
-      background-color #fff
-      color #ccc
-      border-radius .1rem
-      span 
-        margin-left .1rem
-    .header-right 
-      width 1.28rem
-      text-align center
-      span 
-        margin-left -.06rem
 </style>
