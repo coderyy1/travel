@@ -61,8 +61,8 @@ export default {
               },
               {
                   id: '0009',
-                  title: '汽车票船票',
-                  iconUrl: 'https://picbed.qunarzz.com/377db8cb2143aebf01869c9baad3d325.png'
+                  title: '自由行',
+                  iconUrl: 'https://picbed.qunarzz.com/ae617a31e0bd5803d76918b817f6d942.png'
               },
               {
                   id: '0010',
@@ -147,8 +147,9 @@ export default {
 @import '~styles/mixins.styl'
   .icons >>> .swiper-container
     height 0
-    padding-bottom 78.52%
+    padding-bottom 39.25%
   .icons
+    margin-top .2rem
     .icon-items 
       position relative
       overflow hidden
