@@ -18,25 +18,13 @@
 <script>
 export default {
   name: 'Weekend',
-  data () {
-      return {
-         weekendList: [{
-        id: '0001',
-        imgUrl: 'http://img1.qunarzz.com/sight/source/1505/9f/f585152825459.jpg_r_640x214_5d46e4cc.jpg',
-        title: '温泉有水上乐园',
-        desc: '泡泡温泉，吹吹海风，深觉人生美好'
-      }, {
-        id: '0002',
-        imgUrl: 'http://img1.qunarzz.com/sight/source/1811/f3/86173f863bef61.jpg_r_640x214_52b003ac.jpg',
-        title: '京城周末撒欢',
-        desc: '在帝都过周末，不仅仅是城中游！'
-      }, {
-        id: '0003',
-        imgUrl: 'http://img1.qunarzz.com/sight/source/1509/81/0412da9c4db66a.jpg_r_640x214_8e23871e.jpg',
-        title: '登高望远秋色佳',
-        desc: '山顶满眼彩色，此情此景醉了'
-      }]
+  props: {
+    weekendList: {
+      type: Array,
+      default () {
+        return []
       }
+    }
   }
 }
 </script>
@@ -53,7 +41,7 @@ export default {
     .item-img-wrapper
       overflow hidden
       height 0
-      padding-bottom 33.9%
+      padding-bottom 37.11%
       .item-img
         width 100%
     .item-info

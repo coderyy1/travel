@@ -1,26 +1,25 @@
 <template>
   <div class="header">
-      <!-- <div class="header-left"><solt name="left"></solt></div>
-      <div class="header-content"><solt name="content"></solt></div>
-      <div class="header-right"><solt name="right"></solt></div> -->
-
-      <div class="header-left">
-          <div class="iconfont">&#xe624;</div>
-      </div>
-      <div class="header-content">
-          <span class="iconfont">&#xe632;</span>
-          输入城市/景点/游玩主题
-          </div>
-      <div class="header-right">
-          城市
-          <span class="iconfont">&#xe6aa;</span>
-          </div>
+    <div class="header-left">
+      <div class="iconfont">&#xe624;</div>
+    </div>
+    <div class="header-content">
+      <span class="iconfont">&#xe632;</span>
+      输入城市/景点/游玩主题
+    </div>
+    <div class="header-right">
+      {{city}}
+      <span class="iconfont">&#xe6aa;</span>
+    </div>
   </div>
 </template>
  
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  props: {
+    city: String
+  }
 }
 </script>
 

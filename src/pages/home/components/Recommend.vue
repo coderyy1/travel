@@ -18,35 +18,13 @@
 <script>
 export default {
   name: 'Recommend',
-  data () {
-      return {
-         recommendList: [{
-        id: '0001',
-        imgUrl: 'http://img1.qunarzz.com/sight/p0/201404/23/04b92c99462687fa1ba45c1b5ba4ad77.jpg_140x140_73fda71d.jpg',
-        title: '大连圣亚海洋世界',
-        desc: '浪漫大连首站，浪漫的海洋主题乐园'
-      }, {
-        id: '0002',
-        imgUrl: 'http://img1.qunarzz.com/sight/p0/1409/19/adca619faaab0898245dc4ec482b5722.jpg_200x200_1bc99086.jpg',
-        title: '故宫',
-        desc: '世界五大宫之首，穿越与您近在咫尺'
-      }, {
-        id: '0003',
-        imgUrl: 'http://img1.qunarzz.com/sight/p0/2005/ad/adc09bb2c41b9f71a3.water.jpg_200x200_87b3da1d.jpg',
-        title: '香山公园',
-        desc: '坐上开往春天的地铁，体验香山的美'
-      }, {
-        id: '0004',
-        imgUrl: 'http://img1.qunarzz.com/sight/p0/2005/4a/4a2a2afc7a3ca8a6a3.water.jpg_200x200_4b55a911.jpg',
-        title: '古北水镇',
-        desc: '体验水镇的美'
-      }, {
-        id: '0005',
-        imgUrl: 'http://img1.qunarzz.com/sight/p0/2010/ea/ea45e52a4e22851ca3.img.jpg_200x200_df8ffdaf.jpg',
-        title: '北京欢乐谷',
-        desc: '亚洲唯一飞行式过山车等你来挑战'
-      }]
+  props: {
+    recommendList: {
+      type: Array,
+      default () {
+        return []
       }
+    }
   }
 }
 </script>
