@@ -1,8 +1,11 @@
 <template>
   <div class="city">
     <city-header/>
-    <list :city="city" :hot-cities="hotCities" :cities="cities"/>
-    <right-list/>
+    <list :city="city" 
+      :hot-cities="hotCities" 
+      :cities="cities"
+      :keyVal="keyOfRightList"/>
+    <right-list :cities="cities" @change="changeTo"/>
   </div>
 </template>
 
@@ -21,7 +24,8 @@ export default {
     return {
         city: '',
         hotCities: [],
-        cities: {}
+        cities: {},
+        keyOfRightList: 'A'
     }
   },
   methods: {
@@ -38,6 +42,9 @@ export default {
             this.hotCities = data.hotCities
             this.cities = data.cities
           }
+      },
+      changeTo (e) {
+          this.keyOfRightList = e
       }
   },
   mounted () {

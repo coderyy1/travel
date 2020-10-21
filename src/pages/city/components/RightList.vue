@@ -1,37 +1,73 @@
 <template>
   <ul class="right-list">
-    <li>A</li>
-    <li>B</li>
-    <li>C</li>
-    <li>D</li>
-    <li>E</li>
-    <li>F</li>
-    <li>G</li>
-    <li>H</li>
-    <li>I</li>
-    <li>J</li>
-    <li>K</li>
-    <li>L</li>
-    <li>M</li>
-    <li>N</li>
-    <li>O</li>
-    <li>P</li>
-    <li>Q</li>
-    <li>R</li>
-    <li>S</li>
-    <li>T</li>
-    <li>U</li>
-    <li>V</li>
-    <li>W</li>
-    <li>X</li>
-    <li>Y</li>
-    <li>Z</li>
+    <li v-for="item of letters" 
+      :key="item"
+      :ref="item"
+      @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+      @click="rightListClick"
+    >
+      {{item}}
+    </li>
   </ul>
 </template>
 
 <script>
 export default {
-  name: 'RightList'
+  name: 'RightList',
+  data () {
+      return {
+        touchStatus: false,
+        startY: 0,
+        timer: null
+      }
+  },
+  props: {
+    cities: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  computed: {
+    letters () {
+      const letters = []
+      for (let i in this.cities) {
+        letters.push(i)
+      }
+      return letters
+    }
+  },
+  methods: {
+    rightListClick (e) {
+        this.$emit('change', e.target.innerText)
+    },
+    handleTouchStart () {
+        this.touchStatus = true
+    },
+    handleTouchMove (e) {
+        if(this.touchStatus) {
+          if (this.timer) {
+            clearTimeout(this.timer)
+          }
+          this.timer = setTimeout(() => {
+            const touchY = e.touches[0].clientY - 80
+            const index = Math.floor((touchY - this.startY) / 20)
+            if (index >= 0 && index <this.letters.length) {
+              this.$emit('change', this.letters[index])
+            }
+          }, 16)
+        }
+    },
+    handleTouchEnd () {
+        this.touchStatus = false
+    }
+  },
+  updated () {
+    this.startY = this.$refs['A'][0].offsetTop
+  }
 }
 </script>
 
@@ -48,6 +84,7 @@ export default {
     justify-content center
     text-align center
     z-index 9
+    user-select none
     li
       line-height .4rem
       font-size .24rem
