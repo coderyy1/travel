@@ -3,12 +3,13 @@
     <swiper :options="swiperOption" v-if="showSwiper">
       <swiper-slide v-for="(pageItem, index) of pages" :key="index" >
         <div class="icon-items" v-for="item of pageItem" :key="item.id">
-        <div class="icon-img">
-          <img class="top-img" :src="item.iconUrl" alt="">
-        </div>
-        <span class="icon-desc">{{item.title}}</span>
+          <div class="icon-img">
+            <img class="top-img" :src="item.iconUrl" alt="">
+          </div>
+          <span class="icon-desc">{{item.title}}</span>
         </div>
       </swiper-slide>
+      <div class="swiper-pagination"  slot="pagination"></div>
     </swiper>
   </div>
 </template>
@@ -19,6 +20,7 @@ export default {
   data () {
       return {
           swiperOption: {
+              pagination: '.swiper-pagination',
               loop: true,
               autoplay: false
           }
@@ -56,9 +58,10 @@ export default {
 @import '~styles/mixins.styl'
   .icons >>> .swiper-container
     height 0
-    padding-bottom 39.25%
+    padding-bottom 48%
   .icons
     margin-top .2rem
+    margin-bottom -.2rem
     .icon-items 
       position relative
       overflow hidden
