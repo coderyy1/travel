@@ -1,7 +1,7 @@
 <template>
   <div class="city">
     <city-header :cities="cities"/>
-    <list :city="city" 
+    <list 
       :hot-cities="hotCities" 
       :cities="cities"
       :keyVal="keyOfRightList"/>
@@ -22,7 +22,6 @@ export default {
   },
   data () {
     return {
-        city: '',
         hotCities: [],
         cities: {},
         keyOfRightList: 'A'
@@ -38,7 +37,6 @@ export default {
           const resData = res.data
           if(resData.ret && resData.data) {
             const data = resData.data
-            this.city = data.city
             this.hotCities = data.hotCities
             this.cities = data.cities
           }

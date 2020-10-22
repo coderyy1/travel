@@ -16,6 +16,7 @@
             class="button-wrapper" 
             v-for="item of hotCities" 
             :key="item.id"
+            @click="citySelect(item.name)"
           >
             <div class="button">{{item.name}}</div>
           </div>
@@ -33,6 +34,7 @@
             class="item border-bottom" 
             v-for="itemCity of item" 
             :key="itemCity.id"
+            @click="citySelect(itemCity.name)"
           >
               {{itemCity.name}}
           </div>
@@ -44,16 +46,11 @@
 
 <script>
 import BScroll from 'better-scroll'
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   name: 'List',
   props: {
-    city: {
-      type: String,
-      default () {
-        return ''
-      }
-    },
     hotCities: {
       type: Array,
       default () {
@@ -69,6 +66,18 @@ export default {
     keyVal: {
       type: String,
       default: 'A'
+    }
+  },
+  computed: {
+    ...mapState(['city'])
+  },
+  methods: {
+    ...mapMutations({
+      changeCity: 'change_city'
+    }),
+    citySelect (name) {
+      this.changeCity(name)
+      this.$router.push('/')
     }
   },
   watch: {
