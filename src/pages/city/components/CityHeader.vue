@@ -9,14 +9,83 @@
       <div class="top-center">选择城市</div>
     </div>
     <div class="header-bottom">
-      <input class="city-input" type="text" placeholder="输入城市名或拼音">
+      <input v-model="keyWords" class="city-input" type="text" placeholder="输入城市名或拼音">
+    </div>
+    <div class="search-content" ref="search" v-show="keyWords">
+      <ul>
+        <li 
+          class="search-item border-bottom" 
+          v-for="item of list"
+          :key="item.id"
+        >
+          {{item.name}}
+        </li>
+        <li class="search-item atcenter border-bottom" v-show="isShow">没有找到匹配的城市</li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 export default {
-  name: 'CityHeader'
+  name: 'CityHeader',
+  data () {
+    return {
+      keyWords: '',
+      list: [],
+      timer1: null,
+      timer2: null
+    }
+  },
+  watch: {
+      keyWords () {
+        if (this.timer1) {
+          clearTimeout(this.timer1)
+        }
+        if (!this.keyWords) {
+          this.list = []
+          return
+        }
+        this.timer1 = setTimeout(() => {
+          const res = []
+          for (let i in this.cities) {
+            this.cities[i].forEach(item => {
+              if (item.spell.indexOf(this.keyWords) > -1 || item.name.indexOf(this.keyWords) > -1) {
+                res.push(item)
+              }
+            })
+          }
+          this.list = res
+        }, 100)
+      }
+  },
+  props: {
+    cities: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  computed: {
+    isShow () {
+      return !this.list.length
+    }
+  },
+  mounted () {
+    this.scroll = new BScroll(this.$refs.search)
+  },
+  updated () {
+    if (this.timer2) {
+      clearTimeout(this.timer2)
+    }
+    this.timer2 = setTimeout(() => {
+      this.scroll.refresh()
+      this.scroll.scrollTo(0, 0, 0)
+    }, 100)
+  }
 }
 </script>
 
@@ -59,4 +128,23 @@ export default {
         line-height .6rem
         color #666
         padding 0 .1rem
+    .search-content
+      overflow hidden
+      position absolute
+      top 1.58rem
+      left 0
+      right 0
+      bottom 0
+      background-color #eee
+      z-index 99
+      .search-item
+        line-height .68rem
+        padding-left .2rem
+        background-color #fff
+        color #666
+      .atcenter
+        text-align center
+      .border-bottom
+        &:before
+          border-color #ccc
 </style>
