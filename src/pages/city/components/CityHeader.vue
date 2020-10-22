@@ -96,6 +96,9 @@ export default {
       this.scroll.refresh()
       this.scroll.scrollTo(0, 0, 0)
     }, 100)
+  },
+  deactivated () {
+    this.keyWords = ''
   }
 }
 </script>
