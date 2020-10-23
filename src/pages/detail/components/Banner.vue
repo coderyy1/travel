@@ -8,9 +8,6 @@
         </div>
         <div class="info-title">颐和园(AAAAA景区)</div>
       </div>
-      <div class="back" @click="backClick">
-        <div class="iconfont">&#xe624;</div>
-      </div>
     </div>
     <Gallary :imgs="imgs" v-show="showGallary" @close="closeGallary"/>
   </div>
@@ -34,9 +31,6 @@ export default {
     Gallary
   },
   methods: {
-    backClick () {
-      this.$router.push('/')
-    },
     gallaryClick () {
       this.showGallary = true
     },
@@ -72,14 +66,5 @@ export default {
       .iconfont
         font-size .24rem
         margin-right .08rem
-    .back
-      position absolute
-      left .2rem
-      top .2rem
-      width .84rem
-      line-height .84rem
-      text-align center
-      color #fff
-      background-color rgba(10, 10, 10, .6)
-      border-radius 50%
+    
 </style>
