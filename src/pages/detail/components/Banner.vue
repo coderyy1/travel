@@ -9,12 +9,13 @@
         <div class="info-title">{{info.sightName}}</div>
       </div>
     </div>
-    <Gallary :imgs="imgs" v-show="showGallary" @close="closeGallary"/>
+    <Fade><Gallary :imgs="imgs" v-show="showGallary" @close="closeGallary"/></Fade>
   </div>
 </template>
 
 <script>
 import Gallary from '@/common/gallary/Gallary'
+import Fade from '@/common/fade/Fade'
 
 export default {
   name: 'Banner',
@@ -38,7 +39,7 @@ export default {
     }
   },
   components: {
-    Gallary
+    Gallary, Fade
   },
   methods: {
     gallaryClick () {

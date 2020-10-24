@@ -34,7 +34,7 @@ export default {
       this.$router.push('/')
     },
     handleScroll () {
-      const top = document.documentElement.scrollTop
+      const top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
       if (top >= 48) {
         let opacity = top / 100
         opacity = opacity > 1 ? 1: opacity

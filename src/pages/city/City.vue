@@ -1,11 +1,11 @@
 <template>
   <div class="city">
-    <city-header :cities="cities"/>
+    <city-header :cities="cities"  @isfocus="tof" @isblur="tot"/>
     <list 
       :hot-cities="hotCities" 
       :cities="cities"
       :keyVal="keyOfRightList"/>
-    <right-list :cities="cities" @change="changeTo"/>
+    <right-list :cities="cities" @change="changeTo" v-show="showRight"/>
   </div>
 </template>
 
@@ -24,7 +24,8 @@ export default {
     return {
         hotCities: [],
         cities: {},
-        keyOfRightList: 'A'
+        keyOfRightList: 'A',
+        showRight: true
     }
   },
   methods: {
@@ -43,6 +44,12 @@ export default {
       },
       changeTo (e) {
           this.keyOfRightList = e
+      },
+      tof () {
+        this.showRight = false
+      },
+      tot () {
+        this.showRight = true
       }
   },
   mounted () {

@@ -9,7 +9,7 @@
       <div class="top-center">选择城市</div>
     </div>
     <div class="header-bottom">
-      <input v-model="keyWords" class="city-input" type="text" placeholder="输入城市名或拼音">
+      <input v-model="keyWords" class="city-input" type="text" placeholder="输入城市名或拼音" @focus="inputFocus" @blur="inputBlur"/>
     </div>
     <div class="search-content" ref="search" v-show="keyWords">
       <ul>
@@ -78,6 +78,12 @@ export default {
     citySelect (name) {
       this.changeCity(name)
       this.$router.push('/')
+    },
+    inputFocus () {
+      this.$emit('isfocus')
+    },
+    inputBlur () {
+      this.$emit('isblur')
     }
   },
   computed: {
@@ -86,7 +92,9 @@ export default {
     }
   },
   mounted () {
-    this.scroll = new BScroll(this.$refs.search)
+    this.scroll = new BScroll(this.$refs.search, {
+      click: true
+    })
   },
   updated () {
     if (this.timer2) {
@@ -134,7 +142,7 @@ export default {
       box-sizing border-box
       .city-input
         box-sizing border-box
-        width 8rem
+        width 96%
         height .6rem
         margin .01rem .15rem .2rem .15rem
         border-radius .08rem
