@@ -45,7 +45,7 @@ export default {
 
 <style lang="stylus" scoped>
   .container >>> .swiper-pagination
-    bottom -4rem
+    bottom -2.8rem
     color #fff
   .container >>> .swiper-container
     overflow inherit
@@ -63,6 +63,9 @@ export default {
     background #000
     z-index 99
     .wrapper
+      width 100%
+      height 0
+      padding-bottom 100%
       .swiper-img
         width 100%
         

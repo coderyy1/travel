@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="banner">
-      <img class="banner-img" src="//img1.qunarzz.com/sight/p0/2005/30/307fa37039eab5cba3.water.jpg_600x330_8db87481.jpg" alt="" @click="gallaryClick">
+      <img class="banner-img" :src="info.bannerImg" @click="gallaryClick">
       <div class="banner-info">
         <div class="info-num">
-          <span class="iconfont">&#xe8ba;</span>54
+          <span class="iconfont">&#xe8ba;</span>{{imgs.length}}
         </div>
-        <div class="info-title">颐和园(AAAAA景区)</div>
+        <div class="info-title">{{info.sightName}}</div>
       </div>
     </div>
     <Gallary :imgs="imgs" v-show="showGallary" @close="closeGallary"/>
@@ -20,11 +20,21 @@ export default {
   name: 'Banner',
   data () {
     return {
-      imgs: ['http://img1.qunarzz.com/sight/p0/1910/21/2155967acb775f3ba3.img.jpg_350x240_84585846.jpg',
-        'http://img1.qunarzz.com/sight/p0/1905/25/25f5e945d9a1f6f7a3.img.jpg_350x240_5be71252.jpg',
-        'http://img1.qunarzz.com/sight/p0/1905/66/660b9dce786c0c1ba3.img.jpg_350x240_e822b8b4.jpg',
-        'http://img1.qunarzz.com/sight/p0/1905/d9/d999507dea6468e0a3.img.jpg_350x240_bd98e6d6.jpg'],
       showGallary: false
+    }
+  },
+  props: {
+    info: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    imgs: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   components: {

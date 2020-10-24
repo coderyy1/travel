@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <Banner/>
+    <Banner :info="bannerInfo" :imgs="grallaryInfo"/>
     <detail-header/>
     <div class="content">
       <detail-list :list="list"/>
@@ -12,6 +12,7 @@
 import Banner from './components/Banner'
 import DetailHeader from './components/DetailHeader'
 import DetailList from './components/List'
+import axios from 'axios'
 
 
 export default {
@@ -21,17 +22,28 @@ export default {
   },
   data () {
     return {
-      list: [
-        {title: '成人票', children: [{title: '成人三馆连票', children: [{title: '成人三馆——1'}]}, {title: '成人五馆连票'}]},
-        {title: '学生票', children: [{title: '学生三馆连票'}, {title: '学生五馆连票'}]},
-        {title: '儿童票', children: [{title: '儿童三馆连票'}, {title: '儿童五馆连票'}]},
-        {title: '特惠票', children: [{title: '特惠三馆连票'}, {title: '成人五馆连票'}]},
-        {title: '儿童票', children: [{title: '儿童三馆连票'}, {title: '儿童五馆连票'}]},
-        {title: '特惠票', children: [{title: '特惠三馆连票'}, {title: '成人五馆连票'}]},
-        {title: '儿童票', children: [{title: '儿童三馆连票'}, {title: '儿童五馆连票'}]},
-        {title: '特惠票', children: [{title: '特惠三馆连票'}, {title: '成人五馆连票'}]}
-      ]
+      bannerInfo: {},
+      grallaryInfo: [],
+      list: []
     }
+  },
+  methods: {
+    getDetailData () {
+      axios.get('/api/detail.json').then(res => this.getDetailDataSucc(res))
+    },
+    getDetailDataSucc (res) {
+      const resData = res.data
+      if(resData.ret && resData.data) {
+        const data = resData.data
+        this.bannerInfo.sightName = data.sightName
+        this.bannerInfo.bannerImg = data.bannerImg
+        this.grallaryInfo = data.gallaryImgs
+        this.list = data.categoryList
+      }
+    }
+  },
+  created () {
+    this.getDetailData()
   }
 }
 </script>
