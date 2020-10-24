@@ -34,7 +34,6 @@ export default {
       this.$router.push('/')
     },
     handleScroll () {
-      console.log('11');
       const top = document.documentElement.scrollTop
       if (top >= 48) {
         let opacity = top / 100
@@ -79,6 +78,7 @@ export default {
     text-align center
     color #fff
     background-color $bgColor
+    z-index 9
     .fixed-left 
       position absolute
       width .88rem
