@@ -34,6 +34,7 @@ export default {
       this.$router.push('/')
     },
     handleScroll () {
+      console.log('11');
       const top = document.documentElement.scrollTop
       if (top >= 48) {
         let opacity = top / 100
@@ -47,6 +48,9 @@ export default {
   },
   activated () {
     window.addEventListener('scroll', this.handleScroll)
+  },
+  deactivatedd () {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
