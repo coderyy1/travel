@@ -5,6 +5,7 @@
     <div class="content">
       <detail-list :list="list"/>
     </div>
+    <div class="bott"></div>
   </div>
 </template>
 
@@ -49,5 +50,7 @@ export default {
 </script>
 
 <style lang='stylus' scoped>
-
+  .bott {
+    padding-bottom 20rem
+  }
 </style>
