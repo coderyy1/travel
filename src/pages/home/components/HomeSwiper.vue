@@ -7,7 +7,9 @@
           <img class="swiper-img" :src="item.imgUrl" alt="">
         </swiper-slide>
       <!-- Optional controls -->
-        <div class="swiper-pagination"  slot="pagination"></div>
+        <template v-slot:pagination>
+          <div class="swiper-pagination" ></div>
+        </template>
       </swiper>
     </div>
   </div>
@@ -15,18 +17,10 @@
 </template>
 
 <script>
+import {computed} from 'vue'
+
 export default {
   name: 'HomeSwiper',
-  data() {
-      return {
-          swiperOption: {
-            pagination: '.swiper-pagination',
-            loop: true,
-            autoplay: 3000,
-            autoplayDisableOnInteraction : false
-          }
-      }
-  },
   props: {
     swiperList: {
       type: Array,
@@ -35,10 +29,18 @@ export default {
       }
     }
   },
-  computed: {
-    showSwiper () {
-      return this.swiperList.length
+  setup(props) {
+    const swiperOption = {
+      pagination: '.swiper-pagination',
+      loop: true,
+      autoplay: 3000,
+      autoplayDisableOnInteraction : false
     }
+    const showSwiper = computed(() => {
+      return props.swiperList.length
+    })
+
+    return {swiperOption, showSwiper}
   }
 }
 </script>

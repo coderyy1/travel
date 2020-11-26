@@ -1,8 +1,15 @@
 <template>
   <div id="app">
-    <keep-alive>
+  <!-- vue2 -->
+    <!-- <keep-alive>
       <router-view/>
-    </keep-alive>
+    </keep-alive> -->
+  <!-- vue3 -->
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 

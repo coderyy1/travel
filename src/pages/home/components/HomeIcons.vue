@@ -9,46 +9,42 @@
           <span class="icon-desc">{{item.title}}</span>
         </div>
       </swiper-slide>
-      <div class="swiper-pagination"  slot="pagination"></div>
+      <template v-slot:pagination>
+        <div class="swiper-pagination" ></div>
+      </template>
     </swiper>
   </div>
 </template>
 
 <script>
+import {computed} from 'vue'
+
 export default {
   name: 'HomeIcons',
-  data () {
-      return {
-          swiperOption: {
+  props: {
+    iconList: Array
+  },
+  setup (props) {
+    const swiperOption = {
               pagination: '.swiper-pagination',
               loop: true,
               autoplay: false
           }
-      }
-  },
-  props: {
-    iconList: {
-        type: Array,
-        default () {
-            return []
-        }
-    }
-  },
-  computed: {
-      pages () {
-          const pages = []
-          this.iconList.forEach((item, index) => {
-              const page = Math.floor(index / 10)
-              if(!pages[page]) {
-                  pages[page] = []
-              }
-              pages[page].push(item)
-          })
-          return pages
-      },
-      showSwiper () {
-        return this.iconList.length
-      }
+    const pages = computed(() => {
+      const pages = []
+      props.iconList.forEach((item, index) => {
+          const page = Math.floor(index / 10)
+          if(!pages[page]) {
+              pages[page] = []
+          }
+          pages[page].push(item)
+      })
+      return pages
+    })
+    const showSwiper = computed(() => {
+      return props.iconList.length
+    })
+    return {swiperOption, pages, showSwiper}
   }
 }
 </script>

@@ -1,13 +1,11 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router, { createRouter, createWebHashHistory } from 'vue-router';
 
 
 import Home from 'pages/home/Home'
 import City from 'pages/city/City'
 import Detail from 'pages/detail/Detail'
 
-
-Vue.use(Router)
 
 const routes = [
   {
@@ -27,9 +25,11 @@ const routes = [
   }
 ]
 
-export default new Router({
+export default createRouter({
+  history: createWebHashHistory(),
   routes,
+
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   }
-})
+});

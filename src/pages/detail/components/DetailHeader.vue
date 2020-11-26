@@ -3,14 +3,14 @@
     <div 
       class="header-abs back" 
       @click="backClick" 
-      v-show="isShow"
+      v-show="data.isShow"
     >
       <div class="iconfont">&#xe624;</div>
     </div>
     <div 
       class="header-fixed" 
-      v-show="!isShow" 
-      :style="opacityStyle"
+      v-show="!data.isShow" 
+      :style="data.opacityStyle"
     >
       <div class="fixed-left iconfont" @click="backClick">&#xe624;</div>
       详情页面
@@ -19,37 +19,43 @@
 </template>
 
 <script>
+import { onActivated, onDeactivated, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   name: 'DetailHeader',
-  data () {
-    return {
+  setup(props, context) {
+    const data = reactive({
       isShow: true,
       opacityStyle: {
         opacity: 0
       }
+    })
+    const router = useRouter()
+
+    function backClick () {
+      router.push('/')
     }
-  },
-  methods: {
-    backClick () {
-      this.$router.push('/')
-    },
-    handleScroll () {
+
+    function handleScroll () {
       const top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
       if (top >= 48) {
         let opacity = top / 100
         opacity = opacity > 1 ? 1: opacity
-        this.opacityStyle = { opacity }
-        this.isShow = false
+        data.opacityStyle = { opacity }
+        data.isShow = false
       }else {
-        this.isShow = true
+        data.isShow = true
       }
     }
-  },
-  activated () {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  deactivatedd () {
-    window.removeEventListener('scroll', this.handleScroll)
+
+    onActivated(() => {
+      window.addEventListener('scroll', handleScroll)
+    })
+
+    onDeactivated(() => {
+    window.removeEventListener('scroll', handleScroll)
+    })
+    return { data, backClick }
   }
 }
 </script>

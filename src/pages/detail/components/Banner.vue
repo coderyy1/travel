@@ -16,14 +16,10 @@
 <script>
 import Gallary from '@/common/gallary/Gallary'
 import Fade from '@/common/fade/Fade'
+import { ref } from 'vue'
 
 export default {
   name: 'Banner',
-  data () {
-    return {
-      showGallary: false
-    }
-  },
   props: {
     info: {
       type: Object,
@@ -41,13 +37,17 @@ export default {
   components: {
     Gallary, Fade
   },
-  methods: {
-    gallaryClick () {
-      this.showGallary = true
-    },
-    closeGallary () {
-      this.showGallary = false
+  setup() {
+    const showGallary = ref(false)
+
+    function gallaryClick () {
+      showGallary.value = true
     }
+
+    function closeGallary () {
+      showGallary.value = false
+    }
+    return { showGallary, gallaryClick, closeGallary }
   }
 }
 </script>

@@ -9,13 +9,13 @@
       <div class="top-center">选择城市</div>
     </div>
     <div class="header-bottom">
-      <input v-model="keyWords" class="city-input" type="text" placeholder="输入城市名或拼音" @focus="inputFocus" @blur="inputBlur"/>
+      <input v-model="data.keyWords" class="city-input" type="text" placeholder="输入城市名或拼音" @focus="inputFocus" @blur="inputBlur"/>
     </div>
-    <div class="search-content" ref="search" v-show="keyWords">
+    <div class="search-content" ref="search" v-show="data.keyWords">
       <ul>
         <li 
           class="search-item border-bottom" 
-          v-for="item of list"
+          v-for="item of data.list"
           :key="item.id"
           @click="citySelect (item.name)"
         >
@@ -29,40 +29,12 @@
 
 <script>
 import BScroll from 'better-scroll'
-import {mapMutations} from 'vuex'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { reactive, ref, watch, computed, onMounted, onUpdated, onDeactivated } from 'vue'
 
 export default {
   name: 'CityHeader',
-  data () {
-    return {
-      keyWords: '',
-      list: [],
-      timer1: null,
-      timer2: null
-    }
-  },
-  watch: {
-      keyWords () {
-        if (this.timer1) {
-          clearTimeout(this.timer1)
-        }
-        if (!this.keyWords) {
-          this.list = []
-          return
-        }
-        this.timer1 = setTimeout(() => {
-          const res = []
-          for (let i in this.cities) {
-            this.cities[i].forEach(item => {
-              if (item.spell.indexOf(this.keyWords) > -1 || item.name.indexOf(this.keyWords) > -1) {
-                res.push(item)
-              }
-            })
-          }
-          this.list = res
-        }, 100)
-      }
-  },
   props: {
     cities: {
       type: Object,
@@ -71,44 +43,86 @@ export default {
       }
     }
   },
-  methods: {
-    ...mapMutations({
-      changeCity: 'change_city'
-    }),
-    citySelect (name) {
-      this.changeCity(name)
-      this.$router.push('/')
-    },
-    inputFocus () {
-      this.$emit('isfocus')
-    },
-    inputBlur () {
-      this.$emit('isblur')
+  setup(props, context) {
+    const { data, isShow } = useSearchLogic(props)
+    const store = useStore()
+    const router = useRouter()
+    const search = ref(null)
+    let timer2 = null
+    let scroll = null
+
+    function citySelect (name) {
+      store.commit('change_city', name)
+      router.push('/')
     }
-  },
-  computed: {
-    isShow () {
-      return !this.list.length
+
+    function inputFocus () {
+      context.emit('isfocus')
+    }    
+    
+    function inputBlur () {
+      context.emit('isblur')
     }
-  },
-  mounted () {
-    this.scroll = new BScroll(this.$refs.search, {
-      click: true
+
+    onMounted(() => {
+      scroll = new BScroll(search.value, {
+        click: true
+      })
     })
-  },
-  updated () {
-    if (this.timer2) {
-      clearTimeout(this.timer2)
-    }
-    this.timer2 = setTimeout(() => {
-      this.scroll.refresh()
-      this.scroll.scrollTo(0, 0, 0)
-    }, 100)
-  },
-  deactivated () {
-    this.keyWords = ''
+
+    onUpdated(() => {
+      if (timer2) {
+        clearTimeout(timer2)
+      }
+      timer2 = setTimeout(() => {
+        scroll.refresh()
+        scroll.scrollTo(0, 0, 0)
+      }, 100)
+    })
+
+    onDeactivated(() => {
+      data.keyWords = ''
+    })
+
+    return { data, search, isShow, citySelect, inputFocus, inputBlur }
   }
+  
 }
+
+  function useSearchLogic(props) {
+    const data = reactive({
+      keyWords: '',
+      list: []
+    })
+    let timer1 = null
+
+    const isShow = computed(() => {
+      return !data.list.length
+    })
+
+    watch(() => data.keyWords, () => {
+        if (timer1) {
+          clearTimeout(timer1)
+        }
+        if (!data.keyWords) {
+          data.list = []
+          return
+        }
+        timer1 = setTimeout(() => {
+          const res = []
+          for (let i in props.cities) {
+            props.cities[i].forEach(item => {
+              if (item.spell.indexOf(data.keyWords) > -1 || item.name.indexOf(data.keyWords) > -1) {
+                res.push(item)
+              }
+            })
+          }
+          data.list = res
+        }, 100)
+    })
+
+    return { data, isShow }
+  }
 </script>
 
 <style lang="stylus" scoped>

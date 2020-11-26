@@ -7,7 +7,9 @@
           <img class="swiper-img" :src="item" alt="">
         </swiper-slide>
       <!-- Optional controls -->
-        <div class="swiper-pagination"  slot="pagination"></div>
+        <template v-slot:pagination>
+          <div class="swiper-pagination"></div>
+        </template>
       </swiper>
     </div>
   </div>
@@ -17,16 +19,6 @@
 
 export default {
   name: 'Gallary',
-  data () {
-    return {
-      swiperOption: {
-            pagination: '.swiper-pagination',
-            paginationType: 'fraction',
-            observeParents: true,
-            observer: true
-          }
-    }
-  },
   props: {
     imgs: {
       type: Array,
@@ -35,10 +27,18 @@ export default {
       }
     }
   },
-  methods: {
-    closeGallary () {
-      this.$emit('close')
+  setup(props, context) {
+    const swiperOption = {
+            pagination: '.swiper-pagination',
+            paginationType: 'fraction',
+            observeParents: true,
+            observer: true
+          }
+    function closeGallary () {
+      context.emit('close')
     }
+
+    return { swiperOption, closeGallary }
   }
 }
 </script>

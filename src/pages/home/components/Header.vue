@@ -17,12 +17,17 @@
 </template>
  
 <script>
-import {mapState} from 'vuex'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
 export default {
   name: 'Header',
-  computed: {
-    ...mapState(['city'])
+  setup () {
+    const store = useStore()
+    const city = computed(() => {
+      return store.state.city
+    })
+    return {city}
   }
 }
 </script>

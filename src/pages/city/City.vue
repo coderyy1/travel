@@ -1,11 +1,11 @@
 <template>
   <div class="city">
-    <city-header :cities="cities"  @isfocus="tof" @isblur="tot"/>
+    <city-header :cities="data.cities"  @isfocus="tof" @isblur="tot"/>
     <list 
-      :hot-cities="hotCities" 
-      :cities="cities"
+      :hot-cities="data.hotCities" 
+      :cities="data.cities"
       :keyVal="keyOfRightList"/>
-    <right-list :cities="cities" @change="changeTo" v-show="showRight"/>
+    <right-list :cities="data.cities" @change="changeTo" v-show="showRight"/>
   </div>
 </template>
 
@@ -15,47 +15,69 @@ import List from './components/List'
 import RightList from './components/RightList'
 import axios from 'axios'
 
+import {reactive, ref, onMounted} from 'vue'
+
 export default {
   name: 'City',
   components: {
       CityHeader, List, RightList
   },
-  data () {
-    return {
-        hotCities: [],
-        cities: {},
-        keyOfRightList: 'A',
-        showRight: true
-    }
-  },
-  methods: {
-      getCityData () {
-          axios.get('/api/city.json').then(res => {
-              this.getCityDataSucc(res)
-          })
-      },
-      getCityDataSucc (res) {
-          const resData = res.data
-          if(resData.ret && resData.data) {
-            const data = resData.data
-            this.hotCities = data.hotCities
-            this.cities = data.cities
-          }
-      },
-      changeTo (e) {
-          this.keyOfRightList = e
-      },
-      tof () {
-        this.showRight = false
-      },
-      tot () {
-        this.showRight = true
-      }
-  },
-  mounted () {
-      this.getCityData()
+  setup() {
+    const { keyOfRightList, changeTo } = useLetterLogic()
+    const { showRight, tof, tot } = useShowRightLogic()
+    const { data } = useCityLogic()
+    return {data, keyOfRightList, showRight, changeTo, tof, tot}
   }
 }
+
+  // 城市相关
+  function useCityLogic () {
+    const data = reactive({
+      hotCities: [],
+      cities: {}
+    })
+
+    async function getCityData () {
+          let res = await axios.get('/api/city.json')
+          const resData = res.data
+          if(resData.ret && resData.data) {
+            const result = resData.data
+            data.hotCities = result.hotCities
+            data.cities = result.cities
+          }
+    }
+
+    onMounted(() => {
+      getCityData()
+    })
+    return { data }
+  }
+
+  // 点击侧边栏相关
+  function useLetterLogic () {
+    const keyOfRightList = ref('A')
+
+    function changeTo (e) {
+      keyOfRightList.value = e
+    }
+    return { keyOfRightList, changeTo }
+  }
+
+
+  // 是否显示侧边栏相关
+  function useShowRightLogic () {
+    const showRight = ref(true)
+
+    function tof () {
+      showRight.value = false
+    }
+
+    function tot () {
+      showRight.value = true
+    }
+    return { showRight, tof, tot }
+
+  }
 </script>
 
 <style lang="stylus" scoped>

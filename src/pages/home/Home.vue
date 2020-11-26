@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <Header/>
-    <home-swiper :swiperList="swiperList"/>
-    <home-icons :iconList="iconList"/>
-    <recommend :recommendList="recommendList"/>
-    <weekend :weekendList="weekendList"/>
+    <home-swiper :swiperList="data.swiperList"/>
+    <home-icons :iconList="data.iconList"/>
+    <recommend :recommendList="data.recommendList"/>
+    <weekend :weekendList="data.weekendList"/>
   </div>
 </template>
 
@@ -15,50 +15,47 @@ import HomeIcons from './components/HomeIcons'
 import Recommend from './components/Recommend'
 import Weekend from './components/Weekend'
 import axios from 'axios'
-import {mapState} from 'vuex'
+import {useStore} from 'vuex'
+
+import {reactive, computed, onMounted} from 'vue'
 
 export default {
   name: 'Home',
   components: {
     Header, HomeSwiper, HomeIcons, Recommend, Weekend
   },
-  data () {
-    return {
+  setup() {
+    // 定义data
+    const data = reactive({
       swiperList: [],
       iconList: [],
       recommendList: [],
-      weekendList: [],
-      lastCity: ''
-    }
-  },
-  computed: {
-      ...mapState(['city'])
-  },
-  methods: {
-      getHomeInfo () {
-        axios.get('/api/index.json?city=' + this.city).then(res => this.getHomeInfoSucc(res))
-      },
-      getHomeInfoSucc (res) {
+      weekendList: []
+    })
+    // 使用vuex
+    const store = useStore();
+    // 定义computed
+    const city = computed(() => {
+      return store.state.city
+    }) 
+    // 定义方法
+    async function getHomeInfo () {
+        let res = await axios.get('/api/index.json?city=' + city.value)
         const resData = res.data
         if(resData.ret && resData.data) {
-          const data = resData.data
-          this.swiperList = data.swiperList
-          this.iconList = data.iconList
-          this.recommendList = data.recommendList
-          this.weekendList = data.weekendList
+          const resultData = resData.data
+          data.swiperList = resultData.swiperList
+          data.iconList = resultData.iconList
+          data.recommendList = resultData.recommendList
+          data.weekendList = resultData.weekendList
         }
       }
-  },
-  mounted () {
-    this.lastCity = this.city
-    this.getHomeInfo()
-  },
-  activated () {
-    if (this.city !== this.lastCity) {
-      this.lastCity = this.city
-      this.getHomeInfo()
-    }
+    onMounted( () => {
+      getHomeInfo()
+    })
+    return {data}
   }
+
 }
 </script>
 

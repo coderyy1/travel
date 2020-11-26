@@ -2,7 +2,7 @@
   <ul class="right-list">
     <li v-for="item of letters" 
       :key="item"
-      :ref="item"
+      :ref="elem => elems[item] = elem"
       @touchstart="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
@@ -14,15 +14,10 @@
 </template>
 
 <script>
+import { reactive, ref, computed, onUpdated } from 'vue'
+
 export default {
   name: 'RightList',
-  data () {
-      return {
-        touchStatus: false,
-        startY: 0,
-        timer: null
-      }
-  },
   props: {
     cities: {
       type: Object,
@@ -31,45 +26,65 @@ export default {
       }
     }
   },
-  computed: {
-    letters () {
+  setup(props, context) {
+    let elems = ref([])
+    const { 
+       letters, handleTouchStart, handleTouchMove, handleTouchEnd 
+      } = useMoveLogic(props, context, elems)
+
+    function  rightListClick (e) {
+      context.emit('change', e.target.innerText)
+    }
+    
+
+  return { elems, letters, handleTouchStart, rightListClick, handleTouchMove, handleTouchEnd }
+  }
+
+}
+
+  function useMoveLogic(props, context, elems) {
+    let touchStatus = false
+    let startY = 0
+    let timer = null
+
+    const letters = computed(() => {
       const letters = []
-      for (let i in this.cities) {
+      for (let i in props.cities) {
         letters.push(i)
       }
       return letters
+    })
+
+    function handleTouchStart () {
+      touchStatus = true
     }
-  },
-  methods: {
-    rightListClick (e) {
-        this.$emit('change', e.target.innerText)
-    },
-    handleTouchStart () {
-        this.touchStatus = true
-    },
-    handleTouchMove (e) {
-        if(this.touchStatus) {
-          if (this.timer) {
-            clearTimeout(this.timer)
+
+    function handleTouchMove (e) {
+        if(touchStatus) {
+          if (timer) {
+            clearTimeout(timer)
           }
-          this.timer = setTimeout(() => {
-            this.timer = null
+          timer = setTimeout(() => {
+            timer = null
             const touchY = e.touches[0].clientY - 80
-            const index = Math.floor((touchY - this.startY) / 20)
-            if (index >= 0 && index <this.letters.length) {
-              this.$emit('change', this.letters[index])
+            const index = Math.floor((touchY - startY) / 20)
+            if (index >= 0 && index <letters.value.length) {
+              context.emit('change', letters.value[index])
             }
           }, 8)
         }
-    },
-    handleTouchEnd () {
-        this.touchStatus = false
     }
-  },
-  updated () {
-    this.startY = this.$refs['A'][0].offsetTop
+
+    function handleTouchEnd () {
+        touchStatus = false
+    }
+
+    onUpdated(() => {
+    startY = elems.value['A'].offsetTop
+    })
+
+    return { letters, handleTouchStart, handleTouchMove, handleTouchEnd }
   }
-}
 </script>
 
 <style lang="stylus" scoped>
