@@ -15,6 +15,7 @@ import DetailHeader from './components/DetailHeader'
 import DetailList from './components/List'
 import axios from 'axios'
 import { reactive } from 'vue'
+import { useRoute } from 'vue-router'
 
 
 export default {
@@ -28,9 +29,12 @@ export default {
       grallaryInfo: [],
       list: []
     })
+    const route = useRoute()
 
     async function getDetailData () {
-      let res = await axios.get('/api/detail.json')
+      let res = await axios.get('/api/detail.json', {
+        params: {id: route.params.id}
+      })
       const resData = res.data
       if(resData.ret && resData.data) {
         const result = resData.data
